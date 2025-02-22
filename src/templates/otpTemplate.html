@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTP Email Template</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      text-align: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #333;
+    }
+    .content {
+      padding: 20px;
+      text-align: center;
+    }
+    .otp-code {
+      font-size: 32px;
+      font-weight: bold;
+      color: #007bff;
+      margin: 20px 0;
+    }
+    .instructions {
+      font-size: 16px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .footer {
+      text-align: center;
+      padding: 10px 0;
+      border-top: 1px solid #ddd;
+      font-size: 14px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Your One-Time Password (OTP)</h1>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <p class="instructions">
+        Please use the following One-Time Password (OTP) to complete your login process. This OTP is valid for 2 minutes.
+      </p>
+      <div class="otp-code">
+        {{otp}} <!-- Replace this with the dynamically generated OTP -->
+      </div>
+      <p class="instructions">
+        If you did not request this OTP, please ignore this email or contact support immediately.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>&copy; PortfolioIQ | All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>
