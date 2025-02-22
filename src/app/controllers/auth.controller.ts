@@ -12,16 +12,12 @@ export const sendOtp = async (req: Request, res: Response): Promise<void> => {
 
   try {
     // Find the user by email
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
     if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-     if (!user.active) {
-      res.status(404).json({ message: "User not verified." });
-      return
+      user = await User.create({ email });
     }
     // Generate OTP
+    console.log("rech")
     const otp = generateOTP();
     const otpExpires = new Date(Date.now() + 2 * 60 * 1000); // OTP expires in 2 minutes
     const emailTemplatePath = path.join(
@@ -46,7 +42,7 @@ export const sendOtp = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Send OTP via email
-    let from = `OTP  <${"PortfolioIQ Dashboard"}>`;
+    let from = `OTP  <${"Vastra Dashboard"}>`;
     const mailOptions = {
       from,
       to: email,
@@ -56,7 +52,9 @@ export const sendOtp = async (req: Request, res: Response): Promise<void> => {
 
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({ message: "OTP sent successfully. Check your email." });
+    res
+      .status(200)
+      .json({ message: "OTP sent successfully. Check your email." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to send OTP" });
@@ -113,14 +111,13 @@ export const createProfile = async (
     const otp = generateOTP();
 
     const otpExpires = new Date(Date.now() + 2 * 60 * 1000);
-    let user = await User.findOne({email}) 
-    if(!user){
+    let user = await User.findOne({ email });
+    if (!user) {
       user = await User.create({ email, otp, otpExpires });
-
-    }else{
-      user.otp=otp
-      user.otpExpires=otpExpires
-      await user.save()
+    } else {
+      user.otp = otp;
+      user.otpExpires = otpExpires;
+      await user.save();
     }
     const emailTemplatePath = path.join(
       process.cwd(),
@@ -144,7 +141,9 @@ export const createProfile = async (
 
     await transporter.sendMail(mailOptions).then((response) => {
       if (response?.accepted?.includes(email)) {
-        res.status(200).json({ massage: "Otp Send Successfully. Please Check you email." });
+        res
+          .status(200)
+          .json({ massage: "Otp Send Successfully. Please Check you email." });
       } else {
         res.status(405).json({
           massage: "Please use valid email.",
@@ -192,20 +191,12 @@ export const verifyOTPCreateUser = async (req: Request, res: Response) => {
   }
 };
 
-
-export const getAllUser=async(req:Request,res:Response)=>{
-
-try {
-  
-
-  const users= await User.find({}).lean()
-  res.status(200).json(users)
-
-
-} catch (error) {
-  console.error(error);
-  res.status(500).json({ message: "Failed to get user Data." });
-}
-
-}
-
+export const getAllUser = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find({}).lean();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to get user Data." });
+  }
+};
